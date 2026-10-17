@@ -1,0 +1,7 @@
+{
+  "rewrites": [
+    { "source": "/v1/:path*", "destination": "/api/billing?p=/:path*" },
+    { "source": "/api/create-order", "destination": "/api/billing?p=/create-order" },
+    { "source": "/api/verify-payment", "destination": "/api/billing?p=/verify-payment" }
+  ]
+}
