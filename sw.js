@@ -1,9 +1,9 @@
 /* NeuroTriage service worker — offline-first shell, never touches payments/auth/API */
-const VERSION = "nt-r7-1";
+const VERSION = "nt-r7-2";
 const SHELL = `${VERSION}-shell`;
 const RUNTIME = `${VERSION}-runtime`;
 const PRECACHE = ["./", "./index.html", "./offline.html", "./manifest.webmanifest",
-  "./icons/icon-any-192.png", "./icons/icon-any-512.png", "./icons/icon-maskable-192.png", "./icons/icon-maskable-512.png", "./icons/apple-touch-icon.png"];
+  "./icon-any-192.png", "./icon-any-512.png", "./icon-maskable-192.png", "./icon-maskable-512.png", "./apple-touch-icon.png"];
 const NEVER_CACHE = /(checkout\.razorpay|razorpay\.com|googleapis\.com\/(identitytoolkit|oauth)|securetoken|firebaseio|firestore\.googleapis|cloudfunctions|\/api\/|play\.google\.com|appleid\.apple|overpass-api|accounts\.google)/i;
 const FONTS = /(fonts\.googleapis\.com|fonts\.gstatic\.com|cdnjs\.cloudflare\.com|cdn\.jsdelivr\.net)/i;
 
