@@ -2761,7 +2761,7 @@ var pl=hasPlay();
 if((isTWA()||isNative())&&!pl){show(T("Is app me payment Google Play se hota hai. App ko Play Store se update karke dobara try karein.","In this app payment goes through Google Play. Update the app from the Play Store and try again."));return}
 if(!pl&&!C.androidWeb&&/Android/i.test(navigator.userAgent)){show(T("Android par plan Google Play wale NeuroTriage app se lein.","On Android, get a plan from the NeuroTriage app on Google Play."));return}
 busy=true;show(T("Payment shuru ho raha hai...","Starting payment..."),1);
-(pl?play(n,cy):web(n,cy)).then(function(j){busy=false;hide();if(apply(j)){try{NTSub.close()}catch(e){}show(T("Plan chalu ho gaya. Dhanyavaad!","Your plan is active. Thank you!"))}else show(T("Payment mila par plan abhi confirm nahi hua. Restore dabayein.","Payment received but plan not confirmed yet. Tap Restore."))}).catch(function(e){busy=false;hide();err(e)})}
+(pl?play(n,cy):web(n,cy)).then(function(j){busy=false;hide();if(apply(j)){try{NTSub.close()}catch(e){}show(T("Plan chalu ho gaya. Dhanyavaad!","Your plan is active. Thank you!"));setTimeout(function(){try{location.reload()}catch(e){}},1500)}else show(T("Payment mila par plan abhi confirm nahi hua. Restore dabayein.","Payment received but plan not confirmed yet. Tap Restore."))}).catch(function(e){busy=false;hide();err(e)})}
 function restore(){if(busy)return;
 if(!logged()){try{NTSub.close()}catch(e){}show(T("Restore ke liye wahi account login karein jisse plan liya tha.","Log in with the account you bought the plan with."));try{ntAuthUI.open()}catch(e){}return}
 busy=true;show(T("Aapka plan dhoondh rahe hain...","Looking for your plan..."),1);
