@@ -2871,7 +2871,7 @@ function isPlay(){return (typeof window.getDigitalGoodsService==="function")||is
 function isNative(){try{return !!(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform())}catch(e){return false}}
 function hasPlay(){return typeof window.getDigitalGoodsService==="function"}
 function logged(){try{return !!(window.ntAuth&&ntAuth.isAccount&&ntAuth.isAccount())}catch(e){return false}}
-function call(path,body,method){window.__ntStage="api "+path;return ntAuth.token().then(function(t){if(!t)throw{code:"login"};if(!C.api)throw{code:"noapi"};
+function call(path,body,method){window.__ntStage="api "+path;return ntAuth.token().then(function(t){window.__ntStage+=" (fetch)";if(!t)throw{code:"login"};if(!C.api)throw{code:"noapi"};
 return fetch(C.api+path,{method:method||"POST",headers:{"Content-Type":"application/json","Authorization":"Bearer "+t},body:body?JSON.stringify(body):undefined}).then(function(r){return r.json().catch(function(){return{}}).then(function(j){if(!r.ok)throw{code:"http",status:r.status,data:j};return j})})})}
 /* plan sirf server ke jawab se badalta hai, kabhi client ke bharose nahi */
 function apply(j){if(j&&typeof j.trialEligible==="boolean")window.__ntTrialOk=j.trialEligible;var t=j&&(j.tier|0);if(!(t>=0&&t<=2))return false;var e=+j.exp||0;if(t>0&&e&&e<Date.now())t=0;NTSub.set(t,e);if(t>0){try{var q=JSON.parse(localStorage.getItem("nt_sub"));q.sig=j.sig||"";q.uid=(window.ntAuth&&ntAuth.uid&&ntAuth.uid())||"";localStorage.setItem("nt_sub",JSON.stringify(q));_ntSig=false}catch(x){}try{verifyStored()}catch(x){}}return true}
@@ -2898,7 +2898,7 @@ if(c==="noapi")return show(T("Payment server abhi connect nahi hai. Thodi der ba
 if(c==="sdk")return show(T("Payment window load nahi hui. Internet check karein.","Payment window failed to load. Check your internet."));
 if(c==="failed")return show(T("Payment fail hua. Paisa kata ho to 5-7 din me wapas aa jayega.","Payment failed. If money was deducted it is refunded in 5-7 days."));
 if(s===401)return show(T("Dobara login karein.","Please log in again."));
-var _d="";try{_d=" ["+(window.__ntStage||"")+" | "+(c||"")+(s?" "+s:"")+" "+String((e&&e.data&&(e.data.error&&e.data.error.description||e.data.error||e.data.message))||(e&&e.message)||"").slice(0,120)+"]"}catch(x){}show(T("Kuch gadbad hui. Paisa kata ho to Restore dabayein ya support ko likhein.","Something went wrong. If you were charged, tap Restore or contact support.")+_d)}
+var _d="";try{_d=" ["+(window.__ntStage||"")+" | "+(e&&e.name||"")+" | "+(c||"")+(s?" "+s:"")+" "+String((e&&e.data&&(e.data.error&&e.data.error.description||e.data.error||e.data.message))||(e&&e.message)||"").slice(0,120)+" @ "+String(e&&e.stack||"").split("\n").slice(1,4).join(">").replace(/https?:\/\/[^ )]*\//g,"").slice(0,200)+"]"}catch(x){}show(T("Kuch gadbad hui. Paisa kata ho to Restore dabayein ya support ko likhein.","Something went wrong. If you were charged, tap Restore or contact support.")+_d)}
 function checkout(n,cy){if(busy)return;
 if(!logged()){try{NTSub.close()}catch(e){}show(T("Plan lene se pehle login karein, taaki plan har phone par restore ho sake.","Log in first so your plan can be restored on any device."));try{ntAuthUI.open()}catch(e){}return}
 var pl=hasPlay();
