@@ -3,7 +3,7 @@
  NeuroTriage billing (Netlify Function / Vercel adapter). Secrets sirf env se: RAZORPAY_KEY_ID, RAZORPAY_KEY_SECRET,
  BILLING_SIGN_JWK, FIREBASE_SERVICE_ACCOUNT (+ optional RAZORPAY_WEBHOOK_SECRET, RZP_MODE, RZP_PLAN_*, ADMIN_EMAILS).
  RZP_MODE=auto (default): autopay (Subscriptions) try hota hai; account par autopay na ho to one-time order.
- ADMIN: /admin/* sirf ADMIN_EMAILS (comma list, default chuchukhukhu6@gmail.com) ke Google login se chalta hai.
+ ADMIN: /admin/* ke liye ADMIN_EMAILS (default chuchukhukhu6@gmail.com) ka Google login + env ADMIN_PASSWORD dono chahiye.
  Admin ka diya plan billing/{uid}.grant me alag rehta hai, paid plan ko kabhi overwrite nahi karta.
 */
 const crypto = require("crypto");
@@ -17,7 +17,7 @@ const NAME = { 1: "Pro", 2: "Max" };
 
 const CORS = {
   "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "Content-Type, Authorization",
+  "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Admin-Key",
   "Access-Control-Allow-Methods": "GET,POST,DELETE,OPTIONS",
 };
 const send = (code, obj) => ({ statusCode: code, headers: { ...CORS, "Content-Type": "application/json" }, body: JSON.stringify(obj) });
@@ -200,6 +200,10 @@ async function authAdmin(event) {
   try { db(); d = await admin.auth().verifyIdToken(t); } catch (e) { if (e.status) throw e; throw fail(401, "bad token"); }
   const em = String(d.email || "").toLowerCase();
   if (!d.email_verified || !adminEmails().includes(em)) throw fail(403, "not admin");
+  // doosri parat: password sirf Vercel env ADMIN_PASSWORD me rehta hai (code/repo me kabhi nahi)
+  const want = process.env.ADMIN_PASSWORD || "";
+  if (!want) throw fail(503, "ADMIN_PASSWORD Vercel me set nahi hai");
+  if (!safeEq(event.headers["x-admin-key"] || "", want)) { await new Promise((r) => setTimeout(r, 700)); throw fail(403, "password galat"); }
   return em;
 }
 async function userByEmail(b) {
@@ -233,7 +237,7 @@ async function adminList() {
 }
 
 function health() {
-  const h = { razorpayKeyMode: /^rzp_(test|live)_/.test(process.env.RAZORPAY_KEY_ID || "") ? process.env.RAZORPAY_KEY_ID.slice(4, 8) : "missing", razorpaySecret: !!process.env.RAZORPAY_KEY_SECRET, rzpMode: process.env.RZP_MODE || "auto", firebase: "missing", signKey: "missing", pubX: "" };
+  const h = { adminApi: true, razorpayKeyMode: /^rzp_(test|live)_/.test(process.env.RAZORPAY_KEY_ID || "") ? process.env.RAZORPAY_KEY_ID.slice(4, 8) : "missing", razorpaySecret: !!process.env.RAZORPAY_KEY_SECRET, rzpMode: process.env.RZP_MODE || "auto", firebase: "missing", signKey: "missing", pubX: "" };
   try { const raw = (process.env.FIREBASE_SERVICE_ACCOUNT || "").trim(); if (raw) { const j = JSON.parse(raw[0] === "{" ? raw : Buffer.from(raw, "base64").toString("utf8")); h.firebase = j.project_id ? "ok:" + j.project_id : "invalid"; } } catch (e) { h.firebase = "invalid"; }
   try { let k = (process.env.BILLING_SIGN_JWK || "").trim(); if (k) { if (k[0] === "'" || (k[0] === '"' && k[1] !== "{")) k = k.slice(1, -1); h.pubX = crypto.createPublicKey(crypto.createPrivateKey({ key: JSON.parse(k), format: "jwk" })).export({ format: "jwk" }).x.slice(0, 10); h.signKey = "ok"; } } catch (e) { h.signKey = "invalid"; }
   return h;
