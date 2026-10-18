@@ -1,8 +1,10 @@
 "use strict";
 /*
- NeuroTriage billing (Netlify Function). Secrets sirf env se: RAZORPAY_KEY_ID, RAZORPAY_KEY_SECRET,
- BILLING_SIGN_JWK, FIREBASE_SERVICE_ACCOUNT (+ optional RAZORPAY_WEBHOOK_SECRET, RZP_MODE, RZP_PLAN_*).
+ NeuroTriage billing (Netlify Function / Vercel adapter). Secrets sirf env se: RAZORPAY_KEY_ID, RAZORPAY_KEY_SECRET,
+ BILLING_SIGN_JWK, FIREBASE_SERVICE_ACCOUNT (+ optional RAZORPAY_WEBHOOK_SECRET, RZP_MODE, RZP_PLAN_*, ADMIN_EMAILS).
  RZP_MODE=auto (default): autopay (Subscriptions) try hota hai; account par autopay na ho to one-time order.
+ ADMIN: /admin/* sirf ADMIN_EMAILS (comma list, default chuchukhukhu6@gmail.com) ke Google login se chalta hai.
+ Admin ka diya plan billing/{uid}.grant me alag rehta hai, paid plan ko kabhi overwrite nahi karta.
 */
 const crypto = require("crypto");
 const Razorpay = require("razorpay");
@@ -61,6 +63,9 @@ function statusPayload(uid, d) {
   d = d || {};
   let tier = d.tier | 0, exp = +d.exp || 0;
   if (tier && exp && exp < Date.now()) tier = 0;
+  // admin grant alag field me hai; jo plan zyada bada ya zyada der tak chale wahi lagta hai
+  const g = d.grant || {}, gt = g.tier | 0, ge = +g.exp || 0;
+  if (gt && ge > Date.now() && (gt > tier || (gt === tier && ge > exp))) { tier = gt; exp = ge; }
   const sg = tier ? sign(uid, tier, exp) : "";
   if (tier && !sg) throw fail(500, "BILLING_SIGN_JWK missing"); // chup-chaap khali sig se plan na khule
   return { tier, exp: tier ? exp : 0, sig: sg, autopay: !!d.subId && d.autoRenew !== false, trialEligible: !d.trialUsed && !tier };
@@ -184,6 +189,49 @@ async function webhook(event) {
   return { ok: true };
 }
 
+/* ---------- ADMIN: email ke hisaab se plan free dena / wapas lena ---------- */
+const adminEmails = () => (process.env.ADMIN_EMAILS || "chuchukhukhu6@gmail.com").toLowerCase().split(",").map((s) => s.trim()).filter(Boolean);
+
+async function authAdmin(event) {
+  const h = event.headers.authorization || event.headers.Authorization || "";
+  const t = h.startsWith("Bearer ") ? h.slice(7) : "";
+  if (!t) throw fail(401, "login required");
+  let d;
+  try { db(); d = await admin.auth().verifyIdToken(t); } catch (e) { if (e.status) throw e; throw fail(401, "bad token"); }
+  const em = String(d.email || "").toLowerCase();
+  if (!d.email_verified || !adminEmails().includes(em)) throw fail(403, "not admin");
+  return em;
+}
+async function userByEmail(b) {
+  const email = String(b.email || "").trim().toLowerCase();
+  if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) throw fail(400, "email galat hai");
+  try { return { email, user: await admin.auth().getUserByEmail(email) }; }
+  catch (e) { if (e && e.code === "auth/user-not-found") throw fail(404, "is email se app me abhi login nahi hua; user ko pehle login karne bolein"); throw e; }
+}
+async function adminGrant(by, b) {
+  const { email, user } = await userByEmail(b);
+  const tier = b.tier | 0, days = Math.floor(+b.days);
+  if (!NAME[tier]) throw fail(400, "plan galat hai");
+  if (!(days >= 1 && days <= 3650)) throw fail(400, "din 1 se 3650 ke beech hone chahiye");
+  const ref = userRef(user.uid), snap = await ref.get(), old = (snap.exists && snap.data().grant) || {};
+  const base = (old.tier === tier && old.exp > Date.now()) ? old.exp : Date.now(); // same plan chalu ho to uske upar din jodte hain
+  const exp = base + days * DAY;
+  await ref.set({ grant: { tier, exp, days, by, ts: Date.now() }, updated: Date.now() }, { merge: true });
+  return { ok: true, email, plan: NAME[tier], exp };
+}
+async function adminRevoke(b) {
+  const { email, user } = await userByEmail(b);
+  await userRef(user.uid).set({ grant: admin.firestore.FieldValue.delete(), updated: Date.now() }, { merge: true });
+  return { ok: true, email };
+}
+async function adminList() {
+  const q = await db().collection("billing").where("grant.exp", ">", Date.now()).orderBy("grant.exp", "desc").limit(100).get();
+  const rows = q.docs.map((x) => ({ uid: x.id, ...x.data().grant }));
+  const mail = {};
+  if (rows.length) { const r = await admin.auth().getUsers(rows.map((x) => ({ uid: x.uid }))); r.users.forEach((u) => { mail[u.uid] = u.email; }); }
+  return { items: rows.map((x) => ({ email: mail[x.uid] || x.uid, tier: x.tier, exp: x.exp, days: x.days, ts: x.ts })) };
+}
+
 function health() {
   const h = { razorpayKeyMode: /^rzp_(test|live)_/.test(process.env.RAZORPAY_KEY_ID || "") ? process.env.RAZORPAY_KEY_ID.slice(4, 8) : "missing", razorpaySecret: !!process.env.RAZORPAY_KEY_SECRET, rzpMode: process.env.RZP_MODE || "auto", firebase: "missing", signKey: "missing", pubX: "" };
   try { const raw = (process.env.FIREBASE_SERVICE_ACCOUNT || "").trim(); if (raw) { const j = JSON.parse(raw[0] === "{" ? raw : Buffer.from(raw, "base64").toString("utf8")); h.firebase = j.project_id ? "ok:" + j.project_id : "invalid"; } } catch (e) { h.firebase = "invalid"; }
@@ -198,6 +246,14 @@ exports.handler = async (event) => {
   try {
     if (path === "/billing/razorpay/webhook" && m === "POST") return send(200, await webhook(event));
     if (path === "/billing/health" && m === "GET") return send(200, health());
+    if (path.startsWith("/admin/")) {
+      const by = await authAdmin(event);
+      if (path === "/admin/me" && m === "GET") return send(200, { ok: true, email: by });
+      if (path === "/admin/list" && m === "GET") return send(200, await adminList());
+      if (path === "/admin/grant" && m === "POST") return send(200, await adminGrant(by, parse(event)));
+      if (path === "/admin/revoke" && m === "POST") return send(200, await adminRevoke(parse(event)));
+      return send(404, { error: "not found" });
+    }
     const uid = await authUid(event);
     if ((path === "/billing/razorpay/subscription" || path === "/create-order") && m === "POST") return send(200, await createCheckout(uid, parse(event)));
     if ((path === "/billing/razorpay/verify-subscription" || path === "/verify-payment") && m === "POST") return send(200, await verify(uid, parse(event)));
