@@ -2867,9 +2867,9 @@ function box(){var d=document.getElementById("ntPayBusy");if(!d){d=document.crea
 function show(t,keep){var d=box();d.firstChild.textContent=t;d.classList.add("on");clearTimeout(show.t);if(!keep)show.t=setTimeout(function(){if(!busy)d.classList.remove("on")},3600)}
 function hide(){var d=document.getElementById("ntPayBusy");if(d)d.classList.remove("on")}
 function isTWA(){try{var sa=(window.matchMedia&&matchMedia("(display-mode: standalone)").matches)||navigator.standalone;if(/[?&]src=twa\b/.test(location.search)||(sa&&document.referrer.indexOf("android-app://")===0)){localStorage.setItem("nt_twa","1");return true}if(sa&&localStorage.getItem("nt_twa")==="1")return true}catch(e){}return false}
-function isPlay(){return (typeof window.getDigitalGoodsService==="function")||isTWA()||isNative()}
+function isPlay(){return isTWA()||isNative()}
 function isNative(){try{return !!(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform())}catch(e){return false}}
-function hasPlay(){return typeof window.getDigitalGoodsService==="function"}
+function hasPlay(){return typeof window.getDigitalGoodsService==="function"&&(isTWA()||isNative())}
 function logged(){try{return !!(window.ntAuth&&ntAuth.isAccount&&ntAuth.isAccount())}catch(e){return false}}
 function call(path,body,method){window.__ntStage="api "+path;return ntAuth.token().then(function(t){window.__ntStage+=" (fetch)";if(!t)throw{code:"login"};if(!C.api)throw{code:"noapi"};
 return fetch(C.api+path,{method:method||"POST",headers:{"Content-Type":"application/json","Authorization":"Bearer "+t},body:body?JSON.stringify(body):undefined}).then(function(r){return r.json().catch(function(){return{}}).then(function(j){if(!r.ok)throw{code:"http",status:r.status,data:j};return j})})})}
@@ -2889,7 +2889,7 @@ function cancelAuto(){if(busy)return;if(!logged()){show(T("Pehle login karein.",
 if(!confirm(T("Autopay band karein? Plan current period ke end tak chalega.","Turn off autopay? Your plan stays active until the current period ends.")))return;
 busy=true;show(T("Autopay band ho raha hai...","Turning off autopay..."),1);
 call("/billing/razorpay/cancel",{}).then(function(j){busy=false;show(T("Autopay band ho gaya. Plan period end tak chalega.","Autopay is off. Your plan stays active until the period ends."));try{apply(j)}catch(e){}}).catch(function(e){busy=false;hide();err(e)})}
-function play(n,cy){var k=sku(n,cy);return window.getDigitalGoodsService(GP).then(function(){var q=new PaymentRequest([{supportedMethods:GP,data:{sku:k}}]);return q.show().then(function(p){var d=p.details||{};show(T("Verify ho raha hai...","Verifying..."),1);
+function play(n,cy){var k=sku(n,cy);window.__ntStage="play-init";return window.getDigitalGoodsService(GP).then(function(){var q=new PaymentRequest([{supportedMethods:GP,data:{sku:k}}]);return q.show().then(function(p){var d=p.details||{};show(T("Verify ho raha hai...","Verifying..."),1);
 return call("/billing/google/verify",{sku:k,purchaseToken:d.purchaseToken}).then(function(j){return p.complete("success").then(function(){return j},function(){return j})},function(e){try{p.complete("fail")}catch(x){}throw e})})})}
 function err(e){var c=e&&e.code,s=e&&e.status;
 if(c==="cancel"||(e&&e.name==="AbortError"))return show(T("Payment cancel hua. Koi charge nahi laga.","Payment cancelled. You were not charged."));
@@ -2905,7 +2905,7 @@ var pl=hasPlay();
 if((isTWA()||isNative())&&!pl){show(T("Is app me payment Google Play se hota hai. App ko Play Store se update karke dobara try karein.","In this app payment goes through Google Play. Update the app from the Play Store and try again."));return}
 if(!pl&&!C.androidWeb&&/Android/i.test(navigator.userAgent)){show(T("Android par plan Google Play wale NeuroTriage app se lein.","On Android, get a plan from the NeuroTriage app on Google Play."));return}
 busy=true;show(T("Payment shuru ho raha hai...","Starting payment..."),1);
-(pl?play(n,cy):web(n,cy)).then(function(j){busy=false;hide();if(apply(j)){try{NTSub.close()}catch(e){}show(T("Plan chalu ho gaya. Dhanyavaad!","Your plan is active. Thank you!"))}else show(T("Payment mila par plan abhi confirm nahi hua. Restore dabayein.","Payment received but plan not confirmed yet. Tap Restore."))}).catch(function(e){busy=false;hide();err(e)})}
+(pl?play(n,cy).catch(function(e){if(e&&(e.name==="OperationError"||e.name==="NotSupportedError")&&!isTWA()&&!isNative())return web(n,cy);throw e}):web(n,cy)).then(function(j){busy=false;hide();if(apply(j)){try{NTSub.close()}catch(e){}show(T("Plan chalu ho gaya. Dhanyavaad!","Your plan is active. Thank you!"))}else show(T("Payment mila par plan abhi confirm nahi hua. Restore dabayein.","Payment received but plan not confirmed yet. Tap Restore."))}).catch(function(e){busy=false;hide();err(e)})}
 function restore(){if(busy)return;
 if(!logged()){try{NTSub.close()}catch(e){}show(T("Restore ke liye wahi account login karein jisse plan liya tha.","Log in with the account you bought the plan with."));try{ntAuthUI.open()}catch(e){}return}
 busy=true;show(T("Aapka plan dhoondh rahe hain...","Looking for your plan..."),1);
