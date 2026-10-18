@@ -2898,7 +2898,7 @@ if(c==="noapi")return show(T("Payment server abhi connect nahi hai. Thodi der ba
 if(c==="sdk")return show(T("Payment window load nahi hui. Internet check karein.","Payment window failed to load. Check your internet."));
 if(c==="failed")return show(T("Payment fail hua. Paisa kata ho to 5-7 din me wapas aa jayega.","Payment failed. If money was deducted it is refunded in 5-7 days."));
 if(s===401)return show(T("Dobara login karein.","Please log in again."));
-show(T("Kuch gadbad hui. Paisa kata ho to Restore dabayein ya support ko likhein.","Something went wrong. If you were charged, tap Restore or contact support."))}
+var _d="";try{_d=" ["+(c||"")+(s?" "+s:"")+" "+String((e&&e.data&&(e.data.error&&e.data.error.description||e.data.error||e.data.message))||(e&&e.message)||"").slice(0,120)+"]"}catch(x){}show(T("Kuch gadbad hui. Paisa kata ho to Restore dabayein ya support ko likhein.","Something went wrong. If you were charged, tap Restore or contact support.")+_d)}
 function checkout(n,cy){if(busy)return;
 if(!logged()){try{NTSub.close()}catch(e){}show(T("Plan lene se pehle login karein, taaki plan har phone par restore ho sake.","Log in first so your plan can be restored on any device."));try{ntAuthUI.open()}catch(e){}return}
 var pl=hasPlay();
