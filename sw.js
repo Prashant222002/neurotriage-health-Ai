@@ -1,8 +1,8 @@
-/* NeuroTriage SW r12 - flat layout. Version badlo to cache naya ho jata hai. */
-var V="nt-r12-4",SHELL=["./","index.html","offline.html","manifest.webmanifest","icon-192.png","icon-512.png","icon-512-maskable.png","apple-touch-icon.png"];
+/* NeuroTriage SW r9 - flat layout. Version badlo to cache naya ho jata hai. */
+var V="nt-r11-2",SHELL=["./","index.html","offline.html","manifest.webmanifest","icon-192.png","icon-512.png","icon-512-maskable.png","apple-touch-icon.png"];
 self.addEventListener("install",function(e){e.waitUntil(caches.open(V).then(function(c){return Promise.all(SHELL.map(function(u){return c.add(u).catch(function(){})}))}).then(function(){return self.skipWaiting()}))});
 self.addEventListener("activate",function(e){e.waitUntil(caches.keys().then(function(k){return Promise.all(k.filter(function(x){return x!==V}).map(function(x){return caches.delete(x)}))}).then(function(){return self.clients.claim()}))});
-self.addEventListener("fetch",function(e){var r=e.request;if(r.method!=="GET")return;var u=new URL(r.url);if(u.origin!==location.origin||/^\/(api|v1|\.netlify)\//.test(u.pathname))return;
-if(r.mode==="navigate"){if(!(u.pathname.slice(-1)==="/"||/index\.html$/.test(u.pathname)))return;e.respondWith(new Promise(function(ok,no){var t=setTimeout(function(){caches.match("index.html").then(function(m){m&&ok(m)})},3500);fetch(r).then(function(x){clearTimeout(t);if(x.ok){var y=x.clone();caches.open(V).then(function(c){c.put("index.html",y)})}ok(x)},function(er){clearTimeout(t);no(er)})}).catch(function(){return caches.match("index.html").then(function(m){return m||caches.match("offline.html")})}));return}
+self.addEventListener("fetch",function(e){var r=e.request;if(r.method!=="GET")return;var u=new URL(r.url);if(u.origin!==location.origin)return;if(/^\/(v1|api)\//.test(u.pathname)||/admin\.html$/.test(u.pathname))return;
+if(r.mode==="navigate"){if(!(u.pathname.slice(-1)==="/"||/index\.html$/.test(u.pathname)))return;e.respondWith(fetch(r).then(function(x){var y=x.clone();caches.open(V).then(function(c){c.put("index.html",y)});return x}).catch(function(){return caches.match("index.html").then(function(m){return m||caches.match("offline.html")})}));return}
 e.respondWith(caches.match(r).then(function(m){return m||fetch(r).then(function(x){if(x.ok){var y=x.clone();caches.open(V).then(function(c){c.put(r,y)})}return x})}))});
 self.addEventListener("message",function(e){if(e.data==="skip")self.skipWaiting()});
