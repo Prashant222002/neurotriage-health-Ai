@@ -1,12 +1,8 @@
-[
-  {
-    "relation": ["delegate_permission/common.handle_all_urls"],
-    "target": {
-      "namespace": "android_app",
-      "package_name": "in.neurotriage.app",
-      "sha256_cert_fingerprints": [
-        "YOUR:SHA256:FINGERPRINT"
-      ]
-    }
+[{
+  "relation": ["delegate_permission/common.handle_all_urls"],
+  "target": {
+    "namespace": "android_app",
+    "package_name": "in.neurotriage.www.twa",
+    "sha256_cert_fingerprints": ["5D:6B:0A:53:7D:8A:92:9D:63:23:41:FA:0A:40:81:20:97:AE:76:3D:59:DD:7F:CB:E1:E8:2C:8D:2F:17:AE:8D"]
   }
-]
+}]
