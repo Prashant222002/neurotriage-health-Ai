@@ -105,7 +105,7 @@ async function createCheckout(uid, body) {
         ...(trial ? { start_at: Math.floor((Date.now() + TRIAL_DAYS * DAY) / 1000) + 60 } : {}),
         notes: { uid, tier: String(tier), cycle },
       });
-      await ref.set({ pending: { subId: sub.id, tier, cycle, trial, ts: Date.now() } }, { merge: true });
+      await ref.set({ pending: { subId: sub.id, tier, cycle, trial, ts: Date.now() }, recent: { [sub.id]: { kind: "sub", ts: Date.now() } } }, { merge: true });
       db().collection("config").doc("rzpPlans").set({ autopay: true }, { merge: true }).catch(() => {});
       return { mode: "subscription", keyId, subscriptionId: sub.id, trial };
     } catch (e) {
@@ -119,8 +119,31 @@ async function createCheckout(uid, body) {
   const amount = PRICE[tier][cycle] * 100; // paise, >= 100
   if (amount < 100) throw fail(400, "amount too small");
   const order = await rzp().orders.create({ amount, currency: "INR", receipt: ("nt_" + uid.slice(0, 12) + "_" + Date.now()).slice(0, 40), notes: { uid, tier: String(tier), cycle } });
-  await ref.set({ pending: { orderId: order.id, tier, cycle, ts: Date.now() } }, { merge: true });
+  await ref.set({ pending: { orderId: order.id, tier, cycle, ts: Date.now() }, recent: { [order.id]: { kind: "order", ts: Date.now() } } }, { merge: true });
   return { mode: "order", keyId, orderId: order.id, order_id: order.id, amount: order.amount, currency: order.currency };
+}
+
+/* Plan chalu karne ka EK hi raasta (verify, status-reconcile aur webhook teeno yahi use karte hain).
+   Same payment dobara aaye to plan dobara lamba nahi hota (done list). */
+async function activate(uid, kind, obj, paymentId) {
+  const n = obj.notes || {}, tier = +n.tier, cycle = n.cycle;
+  if (n.uid !== uid || !PRICE[tier] || !PERIOD[cycle]) throw fail(400, "unknown payment");
+  const key = kind === "sub" ? obj.id : (paymentId || obj.id);
+  const ref = userRef(uid), FV = admin.firestore.FieldValue;
+  return db().runTransaction(async (t) => {
+    const snap = await t.get(ref), d = snap.exists ? snap.data() : {};
+    if ((d.done || []).includes(key)) return d;
+    const plain = { tier, cycle, lastPayment: paymentId || key, updated: Date.now() };
+    if (kind === "sub") {
+      plain.exp = ((+obj.current_end || +obj.charge_at || +obj.start_at || 0) * 1000 || Date.now() + PERIOD[cycle]) + GRACE;
+      Object.assign(plain, { subId: obj.id, autoRenew: true, trialUsed: true });
+    } else {
+      plain.exp = Math.max(Date.now(), d.exp || 0) + PERIOD[cycle];
+      plain.autoRenew = false;
+    }
+    t.set(ref, { ...plain, pending: FV.delete(), recent: { [obj.id]: FV.delete() }, done: FV.arrayUnion(key) }, { merge: true });
+    return { ...d, ...plain, done: [...(d.done || []), key] };
+  });
 }
 
 /* POST /billing/razorpay/verify-subscription  (alias /verify-payment); subscription ya order dono */
@@ -130,22 +153,43 @@ async function verify(uid, b) {
   if (!paymentId || !sig || !(subId || orderId)) throw fail(400, "missing fields");
   const expected = subId ? hmac(paymentId + "|" + subId) : hmac(orderId + "|" + paymentId);
   if (!safeEq(expected, sig)) throw fail(400, "signature mismatch"); // paid mark nahi karte
-  const ref = userRef(uid), snap = await ref.get(), d = snap.exists ? snap.data() : {};
   // tier/cycle Razorpay ke notes se (kai baar Upgrade dabane par pending overwrite hota tha)
   const obj = subId ? await rzp().subscriptions.fetch(subId) : await rzp().orders.fetch(orderId);
-  const n = obj.notes || {}, tier = +n.tier, cycle = n.cycle;
-  if (n.uid !== uid || !PRICE[tier] || !PERIOD[cycle]) throw fail(400, "unknown payment");
-  let exp, upd = { tier, cycle, pending: admin.firestore.FieldValue.delete(), lastPayment: paymentId, updated: Date.now() };
-  if (subId) {
-    exp = ((+obj.current_end || +obj.charge_at || +obj.start_at || 0) * 1000 || Date.now() + PERIOD[cycle]) + GRACE;
-    Object.assign(upd, { subId, autoRenew: true, trialUsed: true });
-  } else {
-    exp = Math.max(Date.now(), d.exp || 0) + PERIOD[cycle];
-    upd.autoRenew = false;
+  return statusPayload(uid, await activate(uid, subId ? "sub" : "order", obj, paymentId));
+}
+
+/* Browser/UPI app se wapas aate waqt page band ho jaye to verify call nahi hota. Tab bhi plan mile:
+   status() Razorpay se khud poochta hai ki hamare banaye order/subscription ka paisa aaya ya nahi. */
+async function reconcile(uid, d) {
+  const now = Date.now(), cand = {};
+  Object.keys(d.recent || {}).forEach((id) => { cand[id] = d.recent[id]; });
+  const p = d.pending;
+  if (p && (p.orderId || p.subId)) cand[p.orderId || p.subId] = { kind: p.orderId ? "order" : "sub", ts: p.ts || now };
+  const ids = Object.keys(cand);
+  if (!ids.length || now - (d.lastRec || 0) < 15000) return d;
+  const ref = userRef(uid);
+  await ref.set({ lastRec: now }, { merge: true });
+  let hit = false;
+  for (const id of ids.slice(-8)) {
+    const c = cand[id];
+    if (now - c.ts > 3 * DAY) { await ref.set({ recent: { [id]: admin.firestore.FieldValue.delete() } }, { merge: true }).catch(() => {}); continue; }
+    try {
+      if (c.kind === "order") {
+        const o = await rzp().orders.fetch(id);
+        if (o.status === "paid") {
+          const pays = await rzp().orders.fetchPayments(id);
+          const cap = ((pays && pays.items) || []).find((x) => x.status === "captured");
+          await activate(uid, "order", o, cap && cap.id); hit = true;
+        }
+      } else {
+        const sb = await rzp().subscriptions.fetch(id);
+        if (sb.status === "active" || sb.status === "authenticated") { await activate(uid, "sub", sb, null); hit = true; }
+      }
+    } catch (e) { console.warn("reconcile skip", id, e && (e.status || e.statusCode), e && e.message); }
   }
-  upd.exp = exp;
-  await ref.set(upd, { merge: true });
-  return statusPayload(uid, { ...d, ...upd });
+  if (!hit) return d;
+  const s2 = await ref.get();
+  return s2.exists ? s2.data() : d;
 }
 
 async function cancel(uid) {
@@ -156,7 +200,10 @@ async function cancel(uid) {
 }
 
 async function status(uid) {
-  const s = await userRef(uid).get(), p = statusPayload(uid, s.exists ? s.data() : {});
+  const s = await userRef(uid).get();
+  let d = s.exists ? s.data() : {};
+  try { d = await reconcile(uid, d); } catch (e) { console.warn("reconcile failed", e && e.message); }
+  const p = statusPayload(uid, d);
   const mode = (process.env.RZP_MODE || "auto").toLowerCase();
   if (mode === "orders") p.trialEligible = false;
   else if (mode === "auto" && p.trialEligible) { const c = await db().collection("config").doc("rzpPlans").get(); p.trialEligible = !!(c.exists && c.data().autopay); } // autopay chalu hone par hi trial dikhao
@@ -176,7 +223,14 @@ async function webhook(event) {
   const secret = process.env.RAZORPAY_WEBHOOK_SECRET;
   const got = event.headers["x-razorpay-signature"] || "";
   if (!secret || !safeEq(crypto.createHmac("sha256", secret).update(raw).digest("hex"), got)) throw fail(400, "bad webhook signature");
-  const ev = JSON.parse(raw), sub = ev.payload && ev.payload.subscription && ev.payload.subscription.entity;
+  const ev = JSON.parse(raw);
+  if (ev.event === "order.paid") {
+    const o = ev.payload && ev.payload.order && ev.payload.order.entity, pay = ev.payload && ev.payload.payment && ev.payload.payment.entity;
+    const ouid = o && o.notes && o.notes.uid;
+    if (ouid) await activate(ouid, "order", o, pay && pay.id);
+    return { ok: true };
+  }
+  const sub = ev.payload && ev.payload.subscription && ev.payload.subscription.entity;
   const uid = sub && sub.notes && sub.notes.uid;
   if (!uid) return { ok: true };
   const ref = userRef(uid);
@@ -267,8 +321,9 @@ exports.handler = async (event) => {
     if (path.startsWith("/billing/google/")) return send(501, { error: "google play billing not configured" });
     return send(404, { error: "not found" });
   } catch (e) {
-    const code = e.status || (e.statusCode === 401 ? 401 : 500);
-    console.error("billing error", path, code, e.error ? JSON.stringify(e.error) : e.message);
-    return send(code, { error: code === 500 ? "server error" : e.message });
+    const gw = !e.status && e.statusCode; // Razorpay SDK error (uska statusCode hamare user ka login nahi hai)
+    const code = e.status || (gw ? 502 : 500);
+    console.error("billing error", path, code, gw ? "razorpay " + gw : "", e.error ? JSON.stringify(e.error) : e.message);
+    return send(code, { error: code === 500 ? "server error" : gw ? "payment gateway error" : e.message });
   }
 };
