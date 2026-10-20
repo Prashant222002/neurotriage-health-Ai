@@ -2884,7 +2884,8 @@ var F=o.querySelector("#ntTmOff");if(F)F.onclick=function(){try{localStorage.rem
 var K2=o.querySelector("#ntTmOk");if(K2)K2.onclick=function(){var v=(o.querySelector("#ntTmPw").value||"").trim();if(tmH(v)===TM_H){try{localStorage.setItem("nt_tm",TM_H)}catch(e){}location.reload()}else o.querySelector("#ntTmEr").textContent="Galat password"}}
 /* TEST_MODE_END */
 function tier(){return TM?2:realTier()}
-var NT_PREVIEW_ALL=false;function realTier(){if(NT_PREVIEW_ALL)return 2;var tr=ls("nt_trial");if(tr&&tr.e>Date.now())return 2;var s=ls(K);if(!s||!s.tier)return 0;if(s.exp&&Date.now()>s.exp)return 0;if(_ntSig!==true&&!(tr&&tr.e>Date.now()))return 0;return s.tier|0}
+/* FIX: Pro/Max sirf server-signed (verified) paid plan se. Local trial / preview se kabhi nahi. */
+function realTier(){var s=ls(K);if(!s||!s.tier)return 0;if(s.exp&&Date.now()>s.exp)return 0;if(_ntSig!==true)return 0;return s.tier|0}
 /* TEST ONLY (Round 5 me hatega): ?ntplan=pro / max / free */
 function esc(t){return String(t).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
 function mk(){var m=document.getElementById("ntSubM");if(m)return m;m=document.createElement("div");m.id="ntSubM";m.setAttribute("role","dialog");m.setAttribute("aria-modal","true");
@@ -7313,13 +7314,14 @@ function active(){var t=tr(),s=ls("nt_sub");return !!(t&&s&&s.tier===2&&s.exp===
 function used(){return !!tr()}
 function left(){var t=tr();return t?Math.max(0,t.e-Date.now()):0}
 function fmt(ms){var d=Math.floor(ms/DAY),h=Math.floor(ms%DAY/36e5),m=Math.floor(ms%36e5/6e4),s=Math.floor(ms%6e4/1e3),p=function(x){return("0"+x).slice(-2)};return (d?d+(EN()?"d ":"d "):"")+p(h)+":"+p(m)+":"+p(s)}
-function start(){try{if(used()||tier()>0){return}var e=Date.now()+LEN;ls("nt_trial",{s:Date.now(),e:e});NTSub.set(2,e);try{NTSub.close()}catch(x){}
+var TRIAL_ON=false; /* FIX: local free Max trial band. Sirf paid subscription se plan milta hai. */
+function start(){try{if(!TRIAL_ON||used()||tier()>0){return}var e=Date.now()+LEN;ls("nt_trial",{s:Date.now(),e:e});NTSub.set(2,e);try{NTSub.close()}catch(x){}
  try{toast(T("🎉 3 din ka Max trial shuru. Sab kuch khula hai!","🎉 Your 3-day Max trial has started. Everything is unlocked!"),4200)}catch(x){}
  setTimeout(paint,50)}catch(x){}}
 function html(){var t=tier();
  if(active())return'<div class="ntTr on"><div class="tx"><b>✨ '+T("Max trial chalu hai","Max trial is on")+'</b><small>'+T("Bacha hua time","Time left")+': <span class="cd" data-tr="1">'+fmt(left())+'</span> · '+T("Phir apne aap Free me wapas, koi charge nahi.","Then it returns to Free by itself. No charge.")+'</small></div></div>';
- if(t===0&&!used())return'<div class="ntTr"><div class="tx"><b>🎁 '+T("3 din Max free trial","3-day Max free trial")+'</b><small>'+T("Bina card, bina autopay. Sab Pro + Max features khule. Khatam hone par apne aap Free.","No card, no autopay. All Pro + Max features unlocked. Returns to Free when it ends.")+'</small></div><button type="button" data-tr="go">'+T("Trial shuru karein","Start free trial")+'</button></div>';
- if(t===0&&used())return'<div class="ntTr end"><div class="tx"><b>'+T("Aapka free trial khatam ho gaya","Your free trial has ended")+'</b><small>'+T("Pro ya Max lekar sab kuch wapas kholein. SOS aur screening hamesha free hain.","Get Pro or Max to unlock everything again. SOS and screening stay free.")+'</small></div></div>';
+ if(TRIAL_ON&&t===0&&!used())return'<div class="ntTr"><div class="tx"><b>🎁 '+T("3 din Max free trial","3-day Max free trial")+'</b><small>'+T("Bina card, bina autopay. Sab Pro + Max features khule. Khatam hone par apne aap Free.","No card, no autopay. All Pro + Max features unlocked. Returns to Free when it ends.")+'</small></div><button type="button" data-tr="go">'+T("Trial shuru karein","Start free trial")+'</button></div>';
+ if(TRIAL_ON&&t===0&&used())return'<div class="ntTr end"><div class="tx"><b>'+T("Aapka free trial khatam ho gaya","Your free trial has ended")+'</b><small>'+T("Pro ya Max lekar sab kuch wapas kholein. SOS aur screening hamesha free hain.","Get Pro or Max to unlock everything again. SOS and screening stay free.")+'</small></div></div>';
  return""}
 function paint(){try{
  var m=D.getElementById("ntSubM");if(m&&m.classList.contains("on")){var tn=String(tier());if(m.dataset.tt!==undefined&&m.dataset.tt!==tn){m.dataset.tt=tn;try{NTSub.open("")}catch(x){}return}m.dataset.tt=tn;var r=m.querySelector(".r7s");if(r){var old=r.querySelector(".ntTr"),h=html(),key=h.replace(/data-tr="1">[^<]*/,"");
@@ -7328,7 +7330,7 @@ function paint(){try{
  var cd=left();[].forEach.call(D.querySelectorAll('[data-tr="1"]'),function(e){e.textContent=fmt(cd)});
  var c=D.getElementById("ntPlanChip");if(c){var b=c.querySelector("b");if(active()){c.classList.add("trial");if(b)b.textContent="TRIAL "+(cd>DAY?Math.ceil(cd/DAY)+"d":Math.ceil(cd/36e5)+"h")}else if(c.classList.contains("trial")){c.classList.remove("trial");c.className="";var t=tier();c.className="t"+t;if(b)b.textContent=t?["","PRO","MAX"][t]:"Upgrade"}}
  /* trial khatam: ek baar batayein */
- var tt=tr();if(tt&&!tt.n&&Date.now()>tt.e){tt.n=1;ls("nt_trial",tt);try{toast(T("Max trial khatam. Pro / Max lekar sab kuch jaari rakhein.","Max trial ended. Get Pro / Max to keep everything."),4500)}catch(x){}}
+ var tt=tr();if(TRIAL_ON&&tt&&!tt.n&&Date.now()>tt.e){tt.n=1;ls("nt_trial",tt);try{toast(T("Max trial khatam. Pro / Max lekar sab kuch jaari rakhein.","Max trial ended. Get Pro / Max to keep everything."),4500)}catch(x){}}
 }catch(e){}}
 D.addEventListener("click",function(e){var b=e.target.closest&&e.target.closest('[data-tr="go"]');if(b){e.preventDefault();e.stopImmediatePropagation();start()}},true);
 setInterval(paint,500);
@@ -8994,9 +8996,7 @@ if(NS){
       if (window.NTSub) {
         var tr = null;
         try { tr = JSON.parse(localStorage.getItem("nt_trial")); } catch (e) {}
-        if (tr && tr.e > Date.now() && typeof NTSub.sig === "function") {
-          NTSub.sig(true);
-        }
+        /* FIX: trial ke naam par NTSub.sig(true) hata diya (isse bina payment Max khulta tha) */
         if (NTSub.config && NTSub.config.TAB) {
           ["cbt", "cbl", "dbt", "tr", "bd", "lb", "qr", "rv", "wd", "rm", "ms", "pl", "ch", "trk", "tm", "fs", "tb"].forEach(function(k) {
             try { NTSub.config.TAB[k] = 0; } catch (e) {}
