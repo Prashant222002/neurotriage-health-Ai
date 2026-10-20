@@ -3116,7 +3116,7 @@ function apply(j){if(j&&typeof j.trialEligible==="boolean")window.__ntTrialOk=j.
 function b64(x){var b=atob(x),u=new Uint8Array(b.length);for(var i=0;i<b.length;i++)u[i]=b.charCodeAt(i);return u}
 /* server ne plan par signature lagayi hai; localStorage edit karne se plan nahi khulta */
 function verifyStored(){try{if(!C.pub||!window.crypto||!crypto.subtle)return;var s=JSON.parse(localStorage.getItem("nt_sub")||"null");if(!s||!s.tier)return;
-var uid=window.ntAuth&&ntAuth.uid&&ntAuth.uid();if(!s.sig||!s.uid||(uid&&uid!==s.uid)){NTSub.sig(false);return}
+var uid=window.ntAuth&&ntAuth.uid&&ntAuth.uid();if(!s.sig||!s.uid||!uid||uid!==s.uid){NTSub.sig(false);return}
 crypto.subtle.importKey("jwk",C.pub,{name:"ECDSA",namedCurve:"P-256"},false,["verify"]).then(function(k){return crypto.subtle.verify({name:"ECDSA",hash:"SHA-256"},k,b64(s.sig),new TextEncoder().encode(s.uid+"|"+s.tier+"|"+s.exp))}).then(function(ok){NTSub.sig(!!ok)}).catch(function(){NTSub.sig(false)})}catch(e){}}
 function sku(n,cy){return C.skus[n+(cy==="yearly"?"y":"m")]}
 function loadRzp(){window.__ntStage="rzp-load";return new Promise(function(ok,no){if(window.Razorpay)return ok();var s=document.createElement("script");s.src="https://checkout.razorpay.com/v1/checkout.js";s.onload=ok;s.onerror=function(){no({code:"sdk"})};document.head.appendChild(s)})}
