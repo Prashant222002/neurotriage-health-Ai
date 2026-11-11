@@ -1,0 +1,24 @@
+
+
+html[data-scr=fork] #app .top .tbl{overflow:visible!important;gap:6px!important}
+html[data-scr=fork] #app .top .tbl>ntico{display:inline-grid!important;width:34px!important;min-width:34px!important;height:34px!important;margin:0 4px 0 2px!important;flex:none!important}
+html[data-scr=fork] #app .top .tbl>ntico>img.ntic{display:block!important;width:34px!important;height:34px!important;border-radius:22.5%!important;box-shadow:0 4px 14px #1d6bff55,0 0 0 1px #ffffff1f!important;animation:none!important}
+html[data-scr=fork] .nt-ico:before,html[data-scr=fork] .nt-ico:after{display:none!important}
+html[data-scr=fork] .nt-ico .g{animation:none!important;filter:blur(7px);opacity:.38}
+html[data-scr=fork] #app .top .ntwm{min-width:0;overflow:hidden;text-overflow:ellipsis;font-size:clamp(15px,4.9vw,19px)!important}
+@media(max-width:430px){#app .top .ib{width:44px!important;min-width:44px!important;height:44px!important;min-height:44px!important}html .top .ntlg{width:46px!important;min-width:46px!important}html .top{gap:3px!important}}
+#app :focus-visible{outline:3px solid #7dd3fc;outline-offset:2px}
+
+.onb-skip,.ob .onb-skip,html body .ob-hd .onb-skip{min-height:44px;min-width:78px;padding:0 16px 0 18px;border-radius:999px;border:1px solid #ffffff3d;background:#ffffff17;color:#eaf1fb;font-weight:700;letter-spacing:.04em;display:inline-flex;align-items:center;justify-content:center;gap:4px}
+.onb-skip:after{content:"\203A";font-size:20px;line-height:1;margin-top:-2px;opacity:.85}
+.onb-skip:focus-visible{outline:3px solid #7dd3fc;outline-offset:2px}
+#app .warn{border-left:4px solid #f59e0b;line-height:1.5;border-radius:12px}
+#app button.o.s[onclick*="skip"]{border-color:#f59e0b}
+#app .b.g[onclick*="skipped"],#app .b.g[onclick*="obsSkip"]{min-height:48px;border:1.5px solid #ffffff33;font-weight:700}
+html[data-scr=wel] #app,html[data-scr=fork] #app{animation:ntR2In .35s ease both}
+#sgb{top:auto!important;bottom:calc(96px + env(safe-area-inset-bottom,0px))!important}
+html[data-scr=onb] #ntAuthToast{bottom:calc(150px + env(safe-area-inset-bottom,0px))!important}
+
+#ntchf,#nta .nta-chf,#nta.chatm .nta-chf{display:none!important}
+#nta.chatm .nta-chips{max-height:62%!important}
+@keyframes ntR2In{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}

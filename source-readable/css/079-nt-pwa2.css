@@ -1,0 +1,5 @@
+
+html.nt-pwa,html.nt-pwa body{background-color:#0a111f}
+html.nt-pwa{-webkit-tap-highlight-color:transparent}
+html.nt-pwa body{-webkit-touch-callout:none}
+html.nt-pwa input,html.nt-pwa textarea,html.nt-pwa [contenteditable]{-webkit-user-select:text;user-select:text}

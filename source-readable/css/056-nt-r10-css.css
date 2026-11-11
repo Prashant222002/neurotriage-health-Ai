@@ -1,0 +1,16 @@
+
+#ntLegal{align-items:stretch!important}
+#ntLegal .lgs{max-width:100%!important;width:100%;height:100dvh;max-height:100dvh!important;border-radius:0!important;padding:14px 16px calc(28px + env(safe-area-inset-bottom,0px))!important;font-size:16px!important;line-height:1.75!important;background:linear-gradient(170deg,rgba(28,38,86,.96),rgba(10,14,34,.98))!important}
+#ntLegal h2{font-size:24px!important;line-height:1.25;margin:6px 0 8px!important}
+#ntLegal .x{width:44px;height:44px}
+#ntLegal .tb{position:static!important;grid-template-columns:1fr 1fr!important;gap:8px!important;margin:10px 0 16px!important;padding:0!important}
+#ntLegal .tb button{flex-direction:row!important;justify-content:center;gap:6px!important;padding:12px 6px!important;font-size:14px!important;line-height:1.2}
+#ntLegal .tb .ic{font-size:16px}
+#ntLegal h3{font-size:18px!important;margin:24px 0 8px!important}
+#ntLegal p,#ntLegal li{font-size:16px!important;line-height:1.75!important;color:#f1f5ff!important}
+#ntLegal ul{list-style:disc!important;padding-left:22px!important;margin:8px 0!important}
+#ntLegal li{padding:2px 0!important;margin:8px 0!important;background:none!important;border:0!important;border-radius:0!important}
+#ntLegal li::marker{color:var(--ac)}
+#ntLegal .lgs>p:first-of-type{font-size:13.5px!important}
+.nt-lg{display:grid!important;grid-template-columns:1fr 1fr;gap:10px!important}
+.nt-lg a{padding:14px 10px!important;font-size:14.5px;text-align:center;border-radius:16px!important}

@@ -1,0 +1,17 @@
+
+/* === Tools: ek hi (naya) hub. Purana daily-hub landing + purana Home/Paths bar band === */
+#dtroot>.dh,#dtroot .dh-bar~.dh{display:none!important}
+html .ntnb{display:none!important}
+html.nt-th-on #ntTh{bottom:0!important;padding-bottom:calc(104px + env(safe-area-inset-bottom,0px))!important;z-index:9040}
+html.nt-th-on .hm-nav,html.nt-th-on #ntsos,html.nt-th-on #ntpill,html.nt-th-on #ntcpill,html.nt-th-on #apf,html.nt-th-on #ntfab,html.nt-th-on #fcLaunch,html.nt-th-on #ntTheme{display:none!important}
+html.nt-th-on #ntTestBtn,html.nt-tn-on #ntTestBtn,html.nt-tn-on #ntsos,html.nt-tn-on .hm-nav,html.nt-tn-on #apf,html.nt-tn-on #ntfab,html.nt-tn-on #fcLaunch{display:none!important}
+#ntTn{position:fixed;left:50%;transform:translateX(-50%);bottom:0;z-index:9200;display:none;width:100%;max-width:640px;box-sizing:border-box;padding:8px 10px calc(8px + env(safe-area-inset-bottom,0px));gap:2px;background:color-mix(in srgb,var(--sf,#101a2e) 94%,transparent);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border-top:1px solid var(--bd,#243556);border-radius:22px 22px 0 0}
+html.nt-tn-on #ntTn{display:flex}
+#ntTn button{all:unset;box-sizing:border-box;flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;padding:6px 0;min-height:52px;color:var(--mut,#94a7c6);font:700 11.5px system-ui,sans-serif;cursor:pointer;-webkit-tap-highlight-color:transparent}
+#ntTn button i{font-style:normal;width:44px;height:30px;border-radius:15px;display:grid;place-items:center;font-size:19px;transition:background .25s,transform .25s}
+#ntTn button.on{color:var(--tx,#eef4ff)}
+#ntTn button.on i{background:var(--pri2,#14b8a62e);box-shadow:inset 0 0 0 1.5px var(--pri,#14b8a6);transform:translateY(-2px)}
+#ntTn button:active i{transform:scale(.9)}
+#ntTn button:focus-visible{outline:2px solid var(--pri,#14b8a6);outline-offset:-2px;border-radius:14px}
+html.nt-tn-on #ntpv{z-index:9030}
+html.nt-tn-on .pv-scrim{z-index:9190}html.nt-tn-on .pv-sheet{z-index:9210}

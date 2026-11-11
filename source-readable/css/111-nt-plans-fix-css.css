@@ -1,0 +1,61 @@
+
+/* ===== Plans sheet: solid, readable ===== */
+html body #ntSubM{background:rgba(2,6,16,.9)!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
+html body #ntSubM .r7s{background:#0c1426!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important;border:1px solid #2a3a63!important;color:#f3f7ff}
+html body #ntSubM .r7s *{text-shadow:none!important}
+html body #ntSubM .pc{background:#131d38!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important;border:1px solid #2c3d6b!important;color:#f3f7ff}
+html body #ntSubM .pc.hot{background:linear-gradient(160deg,#10424a,#1a2150)!important;border-color:#2dd4bf88!important}
+html body #ntSubM .pc.mx{background:linear-gradient(160deg,#3b2a0a,#1c1530)!important;border-color:#fbbf2499!important}
+html body #ntSubM .pc small,html body #ntSubM .pc li,html body #ntSubM .r7h p{color:#d5def2!important}
+html body #ntSubM .seg,html body #ntSubM .cyc{background:#16213f!important;border:1px solid #2c3d6b!important}
+html body #ntSubM .why{background:#3a2a07!important;color:#ffe7ae!important;border:1px solid #f59e0b66}
+/* ===== Upgrade chip: tiny, top ===== */
+html body #ntPlanChip[id][id][id][id]{min-height:20px!important;height:20px!important;padding:0 8px 0 6px!important;gap:4px!important;border-radius:99px!important;box-shadow:0 3px 10px -4px rgba(251,191,36,.8)!important}
+html body #ntPlanChip[id][id][id][id] b{font-size:10px!important;letter-spacing:.3px}
+html body #ntPlanChip[id][id][id][id] svg{width:11px!important;height:11px!important}
+/* ===== Locks: cleaner ===== */
+[data-ntl]::after{content:"\1F512 " attr(data-ntl)!important;top:8px!important;right:8px!important;padding:3px 9px!important;font:800 10px/1.3 system-ui,sans-serif!important;border-radius:99px!important;letter-spacing:.4px!important;border:1px solid rgba(255,255,255,.35)!important;box-shadow:0 4px 12px -3px #0008!important}
+#ntTh .t.lk{background:linear-gradient(160deg,var(--sf,#101a2e),color-mix(in srgb,var(--c,#6366f1) 9%,var(--sf,#101a2e)));border-style:dashed;border-color:color-mix(in srgb,var(--c,#6366f1) 40%,var(--bd,#243556))}
+#ntTh .t.lk i,#ntTh .t.lk b,#ntTh .t.lk span{opacity:.62}
+#ntTh .t.lk:after{content:"\1F512";position:absolute;right:11px;bottom:9px;font-size:17px;opacity:.55;filter:drop-shadow(0 2px 3px #0006)}
+#ntTh .t.lk em{opacity:1!important;font-weight:900;letter-spacing:.3px;box-shadow:0 4px 12px -4px #0009;border:1px solid rgba(255,255,255,.3)}
+#ntTh .t.p1.lk em{background:linear-gradient(135deg,#5eead4,#6366f1)!important;color:#041a17!important}
+#ntTh .t.p2.lk em{background:linear-gradient(135deg,#fde68a,#f59e0b)!important;color:#2a1600!important}
+#ntTh .t:active{transform:scale(.98)}
+.pv-n.lk .d{filter:saturate(.45) brightness(.9)}
+.pv-n.lk .d:before{content:"\1F512";position:absolute;left:-6px;top:-6px;width:24px;height:24px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(135deg,#6366f1,#14b8a6);font-size:12px;box-shadow:0 2px 6px #0007;z-index:2}
+.pv-card.lkc em{background:linear-gradient(135deg,#fde68a,#f59e0b);color:#2a1600;padding:3px 10px;border-radius:99px;font-weight:900;font-size:11.5px}
+.pv-card.lkc{border-style:dashed}
+#ntTn button.lk i{position:relative}
+#ntTn button.lk i:after{content:"\1F512";position:absolute;right:4px;top:-4px;font-size:10px;width:16px;height:16px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(135deg,#6366f1,#14b8a6)}
+/* ===== Paths glitches ===== */
+.pv-n .go{z-index:4;top:-44px;pointer-events:none}
+.pv-n .d{z-index:1}
+.pv-n .l{max-width:112px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+/* ===== Amisha: summary opaque + quota bar ===== */
+#amBrain{background:rgba(2,6,14,.94)!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
+#amBrain>div{background:#0f1a2e!important;color:#f3f7ff!important;border:1px solid #2f4470!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
+#amBrain p,#amBrain li,#amBrain div{color:inherit}
+#nta .nta-chips button{background:#14213a;color:#eef4fb;border:1px solid #2f4470}
+#amQuota{margin:6px 12px 2px;padding:8px 10px;border-radius:16px;background:#0f1a2e;border:1px solid #2f4470;color:#eef4fb;font:600 12.5px/1.4 system-ui,sans-serif;display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px}
+#amQuota b{font-weight:900;font-size:13px}
+#amQuota .qb{flex:1 1 100%;height:5px;border-radius:9px;background:#243556;overflow:hidden}
+#amQuota .qb i{display:block;height:100%;border-radius:9px;background:linear-gradient(90deg,#14b8a6,#6366f1)}
+#amQuota.zero{border-color:#f59e0b;background:#2a1d06}
+#amQuota.zero .qb i{background:#f59e0b}
+#amQuota .qt{color:#9fe8de;font-variant-numeric:tabular-nums}
+#amQuota .qu{display:flex;gap:6px;margin-left:auto}
+#amQuota .qu button{all:unset;cursor:pointer;padding:5px 12px;border-radius:99px;font:800 11.5px system-ui;color:#041a17;background:linear-gradient(135deg,#5eead4,#818cf8)}
+#amQuota .qu button.mx{background:linear-gradient(135deg,#fde68a,#f59e0b);color:#2a1600}
+#amQuota.max{border-color:#fbbf2480}
+.amq-b{align-self:flex-start;max-width:90%;margin:8px 12px;padding:12px 14px;border-radius:18px;background:#2a1d06;border:1px solid #f59e0b;color:#fff3d1;font:600 14px/1.5 system-ui,sans-serif}
+.amq-b .qu{display:flex;gap:8px;margin-top:10px}
+.amq-b .qu button{all:unset;cursor:pointer;padding:8px 16px;border-radius:99px;font:800 13px system-ui;color:#041a17;background:linear-gradient(135deg,#5eead4,#818cf8)}
+.amq-b .qu button.mx{background:linear-gradient(135deg,#fde68a,#f59e0b);color:#2a1600}
+/* focus / vr quota chip */
+.ntq{margin:8px 0;padding:8px 12px;border-radius:14px;background:#0f1a2e;border:1px solid #2f4470;color:#eef4fb;font:600 12.5px/1.4 system-ui,sans-serif;display:flex;flex-wrap:wrap;gap:4px 10px;align-items:center}
+.ntq .qt{color:#9fe8de;font-variant-numeric:tabular-nums}.ntq button{all:unset;cursor:pointer;margin-left:auto;padding:5px 12px;border-radius:99px;font:800 11.5px system-ui;color:#041a17;background:linear-gradient(135deg,#5eead4,#818cf8)}
+/* ===== Plan avatar (Pro / Max) ===== */
+.ntacc .ntav{width:32px!important;height:32px!important;min-width:32px;display:block;border-radius:50%;flex:none}
+.ntacc[data-r7=pro] .ntav{box-shadow:0 0 0 2px #5eead4,0 0 14px #6366f188}
+.ntacc[data-r7=max] .ntav{box-shadow:0 0 0 2px #fbbf24,0 0 16px #f59e0bcc}

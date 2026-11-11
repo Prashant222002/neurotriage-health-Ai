@@ -1,0 +1,328 @@
+
+  /* 1. MOBILE-FRIENDLY PROPORTIONAL SIZING & COMPACT UI */
+  @media (max-width: 640px) {
+    html, body {
+      font-size: 14.5px !important;
+      line-height: 1.45 !important;
+      overflow-x: hidden !important;
+      -webkit-text-size-adjust: 100% !important;
+    }
+    html[data-fs] #app,
+    html[data-fs] .sheet,
+    html[data-fs] #ntpv,
+    html #app .ntw,
+    html body .ntw {
+      zoom: 1 !important;
+    }
+    #app.w, .w {
+      padding: calc(10px + env(safe-area-inset-top, 0px)) 12px calc(104px + env(safe-area-inset-bottom, 0px)) !important;
+    }
+    #app h1, .ntw h1, .nx-hero h1 {
+      font-size: clamp(19px, 5.2vw, 22px) !important;
+      line-height: 1.22 !important;
+    }
+    #app h2, #dtroot h2, .r3 h2, .gl h2 {
+      font-size: clamp(16px, 4.5vw, 18.5px) !important;
+      line-height: 1.28 !important;
+      margin: 6px 0 8px !important;
+    }
+    #app h3, #dtroot h3, .r2c h3, .q48 h3 {
+      font-size: 15px !important;
+      line-height: 1.3 !important;
+    }
+    #app p, #app li, #dtroot p, #dtroot li {
+      font-size: 14px !important;
+      line-height: 1.5 !important;
+    }
+    #app .gl, #app .card2, #app .r24c, #dtroot .gl, #dtroot .r2c, #dtroot .q48 {
+      padding: 14px !important;
+      border-radius: 18px !important;
+      margin: 10px 0 !important;
+    }
+    /* Proportional Focus Timer Ring & Digits */
+    .dtring svg, .po .porg svg {
+      width: 176px !important;
+      height: 176px !important;
+    }
+    #dtc, .po .porg b {
+      font-size: 34px !important;
+    }
+    .wm .wdg {
+      font-size: 56px !important;
+    }
+  }
+
+  /* 2. DAILY TRACKER / MOOD CHECK-IN CAPSULE DISTORTION FIX (.dtp & .dtp.w) */
+  html:root:root:root:root:root:root:root:root body #app #dtroot[id] .dtp,
+  html body #dtroot .dtp,
+  .dtp {
+    display: grid !important;
+    grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+    gap: 6px !important;
+    width: 100% !important;
+    align-items: stretch !important;
+    box-sizing: border-box !important;
+  }
+  html:root:root:root:root:root:root:root:root body #app #dtroot[id] .dtp.w,
+  html body #dtroot .dtp.w,
+  .dtp.w {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 8px !important;
+  }
+  html:root:root:root:root:root:root:root:root body #app #dtroot[id] .dtp button,
+  html body #dtroot .dtp button,
+  .dtp button {
+    width: 100% !important;
+    min-width: 0 !important;
+    height: 48px !important;
+    min-height: 48px !important;
+    max-height: 52px !important;
+    padding: 4px 2px !important;
+    border-radius: 12px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 2px !important;
+    font: 700 13px/1.1 system-ui, -apple-system, sans-serif !important;
+    box-sizing: border-box !important;
+    transform: none !important;
+    overflow: hidden !important;
+    position: relative !important;
+  }
+  html:root:root:root:root:root:root:root:root body #app #dtroot[id] .dtp button:before,
+  html body #dtroot .dtp button:before {
+    font-size: 16px !important;
+    line-height: 1 !important;
+    margin: 0 !important;
+  }
+  html:root:root:root:root:root:root:root:root body #app #dtroot[id] .dtp button.on,
+  html body #dtroot .dtp button.on {
+    transform: translateY(-1px) !important;
+    border: 2px solid #ffffff !important;
+    box-shadow: 0 4px 14px rgba(45, 212, 191, 0.35) !important;
+  }
+  html:root:root:root:root:root:root:root:root body #app #dtroot[id] .dtp button.on:after,
+  html body #dtroot .dtp button.on:after {
+    top: 2px !important;
+    right: 4px !important;
+    font-size: 10px !important;
+  }
+
+  /* 3. HORIZONTAL SUB-TOOL PILL BAR & TAB BAR CUT-OFF FIX */
+  html:root:root:root:root:root:root:root:root body.nt-daily #dtroot[id] .cl-seg,
+  #dtroot .cl-seg {
+    padding: 10px 10px 6px !important;
+    border-radius: 18px !important;
+    margin: 0 0 10px !important;
+    overflow: hidden !important;
+  }
+  html:root:root:root:root:root:root:root:root body.nt-daily #dtroot[id] .cl-seg > div,
+  #dtroot .cl-seg > div,
+  .f2tab,
+  .t3b,
+  .po .ptabs {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    -webkit-overflow-scrolling: touch !important;
+    scrollbar-width: none !important;
+    gap: 6px !important;
+    padding: 2px 2px 6px !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+  #dtroot .cl-seg > div::-webkit-scrollbar,
+  .f2tab::-webkit-scrollbar,
+  .t3b::-webkit-scrollbar {
+    display: none !important;
+  }
+  html:root:root:root:root:root:root:root:root body.nt-daily #dtroot[id] .cl-seg button,
+  #dtroot .cl-seg button,
+  .f2tab button,
+  .t3b button {
+    flex: 0 0 auto !important;
+    height: 34px !important;
+    min-height: 34px !important;
+    padding: 0 12px !important;
+    font-size: 12.5px !important;
+    font-weight: 700 !important;
+    border-radius: 999px !important;
+    white-space: nowrap !important;
+  }
+
+  /* 4. HEADER, FLOATING BUTTONS & TOAST OVERLAP FIX */
+  /* Hide redundant floating top-left back button when in-page header back button exists */
+  body:has(#dtroot .dh-bar) #ntBackTop,
+  body:has(#dtroot .dh-bar) #ntBack,
+  body:has(.nx-head) #ntBackTop,
+  body:has(.nx-head) #ntBack,
+  body:has(#app .top .tbk) #ntBackTop,
+  body:has(#app .top .tbk) #ntBack {
+    display: none !important;
+  }
+  #dtroot .dh-bar {
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    min-height: 48px !important;
+    padding: 6px 10px !important;
+    border-radius: 16px !important;
+    margin-bottom: 10px !important;
+  }
+  #dtroot .dh-bar button:first-child {
+    min-height: 36px !important;
+    height: 36px !important;
+    padding: 0 12px !important;
+    font-size: 13px !important;
+    border-radius: 12px !important;
+  }
+  #dtroot .dh-bar b {
+    font-size: 15.5px !important;
+    line-height: 1.2 !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+  }
+
+  /* Bottom-left Focus Timer Pill (#ntpill) — compact & docked above bottom action bars */
+  html body #ntpill {
+    position: fixed !important;
+    left: max(12px, env(safe-area-inset-left, 0px)) !important;
+    bottom: calc(76px + env(safe-area-inset-bottom, 0px)) !important;
+    min-height: 34px !important;
+    height: 34px !important;
+    padding: 0 12px !important;
+    border-radius: 999px !important;
+    font: 700 12.5px/1 system-ui, sans-serif !important;
+    z-index: 9400 !important;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45) !important;
+    width: auto !important;
+    max-width: 46vw !important;
+  }
+
+  /* Bottom-right Sound FAB (#ntsnd) — compact & non-overlapping */
+  html body #ntsnd {
+    position: fixed !important;
+    right: max(12px, env(safe-area-inset-right, 0px)) !important;
+    bottom: calc(76px + env(safe-area-inset-bottom, 0px)) !important;
+    z-index: 99980 !important;
+  }
+  html body #ntsnd .ntsFb {
+    width: 44px !important;
+    height: 44px !important;
+    min-width: 44px !important;
+    min-height: 44px !important;
+    font-size: 19px !important;
+    border-radius: 50% !important;
+    background: linear-gradient(135deg, #4f46e5, #0d9488) !important;
+    border: 1.5px solid rgba(255, 255, 255, 0.4) !important;
+    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.5) !important;
+  }
+  html body #ntsnd .ntsFb.off {
+    background: #334155 !important;
+  }
+  /* Give Focus Timer action buttons (.pact) and bottom save bar (.dtbar) clearance from floating pills */
+  .po .pact {
+    margin-bottom: 54px !important;
+    padding-right: 52px !important;
+  }
+
+  /* Move ALL Toast notifications ("You came back 👏", etc.) to the TOP so they never block Pause/Stop/Save buttons */
+  html body #nt_toast,
+  html body #ntCheer,
+  html body .sgt,
+  html body .r1-toast,
+  html body .cptoast,
+  html body #ntFrToast,
+  html body #ntgt {
+    top: calc(54px + env(safe-area-inset-top, 0px)) !important;
+    bottom: auto !important;
+    left: 50% !important;
+    right: auto !important;
+    transform: translateX(-50%) !important;
+    width: auto !important;
+    max-width: min(90vw, 420px) !important;
+    padding: 10px 16px !important;
+    border-radius: 999px !important;
+    background: #0f172a !important;
+    color: #f8fafc !important;
+    border: 1.5px solid #2dd4bf !important;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.65) !important;
+    font: 700 13px/1.35 system-ui, sans-serif !important;
+    z-index: 2147483640 !important;
+    pointer-events: none !important;
+    text-align: center !important;
+  }
+  html body #ntCheer:not(.on) {
+    opacity: 0 !important;
+    visibility: hidden !important;
+    transform: translate(-50%, -140%) !important;
+  }
+  html body #ntCheer.on {
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: translate(-50%, 0) !important;
+  }
+
+  /* 5. OPAQUE SOUND PANEL & FLOATING WIDGETS FIX (NO BACKGROUND BLEED-THROUGH) */
+  html body #ntsnd .ntsPn,
+  html body #ntvr .ntvp,
+  html body .bdw,
+  html body #nt-sound-modal .nt-sm-sheet {
+    background: #0f172a !important;
+    background-image: linear-gradient(180deg, #1e293b 0%, #0f172a 100%) !important;
+    color: #f8fafc !important;
+    border: 1.5px solid rgba(148, 163, 184, 0.32) !important;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.88), 0 0 0 1px rgba(255, 255, 255, 0.08) inset !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    opacity: 1 !important;
+  }
+  html body #ntsnd .ntsPn {
+    z-index: 2147483645 !important;
+    bottom: 54px !important;
+    right: 0 !important;
+    width: min(310px, calc(100vw - 24px)) !important;
+    border-radius: 18px !important;
+    padding: 14px !important;
+  }
+
+  /* 6. UNBLOCK LEADERBOARD & DOCTOR QR SCREENS */
+  #r24lb,
+  #r24lb[data-nthh~=h9],
+  #r24lb[data-nthh~=h9]:not(#nthz),
+  #l48 {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    pointer-events: auto !important;
+  }
+  .lbs, #r24lb .l4s {
+    max-height: 56vh !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    overscroll-behavior: contain !important;
+  }
+  #dtroot .dtq, #ntc-ov .ntd-qr {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    min-height: 200px !important;
+    padding: 12px !important;
+    pointer-events: auto !important;
+  }
+  #dtroot .dtq img, #dtroot .dtq canvas, #ntc-ov .ntd-qr img {
+    width: 190px !important;
+    height: 190px !important;
+    max-width: 75vw !important;
+    max-height: 75vw !important;
+    padding: 8px !important;
+    background: #ffffff !important;
+    border-radius: 14px !important;
+    box-sizing: border-box !important;
+    display: block !important;
+    margin: 0 auto !important;
+  }

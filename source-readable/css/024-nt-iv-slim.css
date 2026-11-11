@@ -1,0 +1,23 @@
+
+html body #ntIv{left:14px;right:auto;bottom:calc(112px + env(safe-area-inset-bottom,0px));flex-direction:row;align-items:center;gap:10px;box-sizing:border-box;max-width:calc(100vw - 28px);padding:0;background:none;border:0;box-shadow:none}
+html body #ntIv:has(.ivB:not([hidden])){padding:8px 14px 8px 8px;border-radius:20px;background:rgba(10,18,36,.96);border:1px solid rgba(94,234,212,.35);box-shadow:0 12px 30px rgba(0,0,0,.5)}
+html body #ntIv .ivW{width:52px;height:52px;margin:0;filter:drop-shadow(0 6px 14px rgba(0,0,0,.5));animation:none}
+html body #ntIv .ivP{border:2px solid rgba(255,255,255,.9);box-shadow:none;background:#0b1428}
+html body #ntIv .ivP video{filter:contrast(1.05) saturate(1.1)}
+html body #ntIv .ivR{inset:-5px;width:calc(100% + 10px);height:calc(100% + 10px)}
+html body #ntIv .ivR .t{stroke:transparent}
+html body #ntIv .ivR circle{stroke-width:2.6}
+html body #ntIv .ivPl{font-size:16px}
+html body #ntIv .ivX,html body #ntIv .ivM{width:20px;height:20px;font-size:9px;border:1px solid rgba(255,255,255,.35);background:rgba(10,18,36,.95)}
+html body #ntIv .ivX{top:-8px;right:-8px}html body #ntIv .ivM{bottom:-6px;right:-8px}
+html body #ntIv .ivB{order:2;flex:1 1 auto;min-width:0;max-width:190px;padding:0;border:0!important;border-radius:0;background:none!important;box-shadow:none}
+html body #ntIv .ivS{font-size:9px;margin-bottom:3px;padding:1px 7px}
+html body #ntIv .ivT{font-size:12.5px;line-height:1.4;font-weight:500}
+html body #ntIv .ivA{margin-top:6px;gap:6px}
+html body #ntIv .ivA button{min-height:30px;padding:0 11px;font-size:12px;border-radius:9px}
+html body #ntIv .ivSnd{order:3;min-height:32px;padding:0 11px;font-size:12px}
+html body #ntIv .ivW{overflow:visible}
+html body #ntIv .ivR{position:absolute;inset:auto;left:-5px;top:-5px;width:62px;height:62px;overflow:visible;z-index:2}
+html body #ntIv .ivR .t{stroke:rgba(251,191,36,.2)!important}
+html body #ntIv .ivR .p{stroke:#fbbf24!important;stroke-width:3;filter:drop-shadow(0 0 3px rgba(251,191,36,.8))}
+html body #ntIv.ivPlay .ivW:before{inset:-5px;border-color:#fbbf24}

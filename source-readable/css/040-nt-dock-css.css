@@ -1,0 +1,6 @@
+
+
+html body #ntBack,html body #ntProPill,html body #ntSbPill,html body #ntpill,html body #ntfab,html body #apf,html body #ntsos,html body #x45pill,html body #ntc-pill,html body #ntTheme,html body #fcLaunch{position:fixed!important;top:auto!important;transform:none!important;margin:0!important;max-width:calc(50vw - 18px)!important;box-sizing:border-box}
+html body #ntBack,html body #ntProPill,html body #ntSbPill,html body #ntpill{left:max(10px,env(safe-area-inset-left,0px))!important;right:auto!important}
+html body #ntfab,html body #apf,html body #ntsos,html body #x45pill,html body #ntc-pill,html body #ntTheme,html body #fcLaunch{right:max(10px,env(safe-area-inset-right,0px))!important;left:auto!important}
+html body #ntdmPill{bottom:var(--d-nav,86px)!important}

@@ -1,0 +1,15 @@
+
+.ntsb,#ntasSup a.ntsb,#ntSup a.ntsb{display:flex!important;align-items:center;justify-content:center;gap:10px;min-height:52px;margin:8px 0 0;padding:0 16px;box-sizing:border-box;border-radius:14px!important;text-decoration:none!important;font:700 15px/1 system-ui,-apple-system,Segoe UI,Roboto,sans-serif!important;letter-spacing:.1px;-webkit-tap-highlight-color:transparent;transition:transform .12s ease,box-shadow .2s ease,filter .2s ease}
+.ntsb:active{transform:scale(.97)}
+.ntsb .ntsi{width:26px;height:26px;flex:none;display:block}
+.ntsb.ntsg,#ntasSup a.ntsb.ntsg,#ntSup a.ntsb.ntsg{background:#fff!important;color:#202124!important;border:1px solid #dadce0!important;box-shadow:0 2px 8px rgba(60,64,67,.22)}
+.ntsb.ntsg span{color:#202124!important}
+.ntsb.ntsg:hover{box-shadow:0 4px 14px rgba(234,67,53,.28)}
+.ntsb.ntsw,#ntasSup a.ntsb.ntsw,#ntSup a.ntsb.ntsw{background:linear-gradient(135deg,#25D366,#128C7E)!important;color:#fff!important;border:1px solid #1fb855!important;box-shadow:0 6px 16px rgba(37,211,102,.38)}
+.ntsb.ntsw span{color:#fff!important;text-shadow:0 1px 1px rgba(0,0,0,.18)}
+.ntsb.ntsw:hover{filter:brightness(1.06)}
+.opts.two>.ntsb{margin:0;min-width:0}
+.opts.two>.ntsb span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#ntasSup{padding:14px!important;background:linear-gradient(180deg,#12213f,#0b1428)!important;border-color:#ffffff33!important}
+#ntasSup b{font-size:15px;letter-spacing:.2px;margin-bottom:6px!important}
+@media (prefers-reduced-motion:reduce){.ntsb{transition:none}}

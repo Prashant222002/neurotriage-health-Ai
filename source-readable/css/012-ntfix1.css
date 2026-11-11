@@ -1,0 +1,9 @@
+
+
+html body #nta.chatm #ntach{flex:1 1 0!important;min-height:50%!important;scroll-behavior:auto!important;overflow-y:auto!important}
+html body #nta.chatm .nta-chips{flex:0 0 auto!important;max-height:min(24vh,190px)!important;overflow-y:auto!important;padding:8px 10px 4px!important;gap:6px!important}
+html body #nta.chatm .nta-chips button{padding:8px 12px!important;font-size:13px!important}
+html body #nta.chatm .nta-n{font-size:10.5px!important;padding-bottom:calc(6px + env(safe-area-inset-bottom,0px))!important}
+
+.ntsec{pointer-events:none!important;position:relative!important;z-index:0!important}
+.r24pos,.r2c{position:relative;z-index:1}

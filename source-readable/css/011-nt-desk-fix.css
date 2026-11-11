@@ -1,0 +1,31 @@
+
+
+@media (min-width:700px),(max-height:620px) and (orientation:landscape){
+html body #nta.chatm .nta-w.ch{max-width:min(820px,100%)!important;height:100vh!important;height:100dvh!important;min-height:0!important;overflow:hidden!important}
+html body #nta.chatm #ntach{flex:1 1 auto!important;min-height:max(180px,38%)!important;overflow-y:auto!important}
+html body #nta.chatm .nta-chips{flex:0 1 auto!important;max-height:min(34%,260px)!important;overflow-y:auto!important;scrollbar-width:thin!important}
+html body #nta.chatm .nta-ctop,html body #nta.chatm .nta-n{flex:0 0 auto!important}
+html body #nta.chatm .nta-chf{flex:0 0 auto!important}
+html body #nta.chatm .nta-b{max-width:80%!important}
+}
+@media (min-width:700px) and (min-height:900px){
+html body #nta.chatm .nta-chips{max-height:min(30%,300px)!important}
+}
+
+
+html[data-scr=wel] body,html[data-scr=wel]{overflow-y:auto!important;height:auto!important;min-height:100dvh!important}
+html[data-scr=wel] #app,html[data-scr=wel] #app.w,html[data-scr=wel] .w{height:auto!important;min-height:100dvh!important;overflow:visible!important;padding-top:0!important}
+html body .ntw{max-width:520px!important;margin:0 auto!important;padding-top:max(34px,calc(env(safe-area-inset-top,0px) + 26px))!important}
+html body .ntw-h{position:relative;padding:6px 0 18px!important;margin-bottom:6px}
+html body .ntw-h:before{content:"";position:absolute;left:50%;top:-6px;width:230px;height:230px;transform:translateX(-50%);background:radial-gradient(circle,#38bdf840,#6366f122 45%,transparent 70%);filter:blur(6px);pointer-events:none;z-index:-1}
+html body .ntw-h svg,html body .ntw-h img{width:76px!important;height:76px!important;max-width:76px!important;max-height:76px!important;border-radius:22px;box-shadow:0 14px 36px -10px #38bdf8aa,0 0 0 1px #ffffff22}
+html body .ntw-h h1{background:linear-gradient(90deg,#fff,#7dd3fc 60%,#a5b4fc);-webkit-background-clip:text;background-clip:text;color:transparent!important;-webkit-text-fill-color:transparent}
+html body .ntw>.gl:first-of-type,html body .ntw .gl{border-radius:24px!important;background:linear-gradient(180deg,#ffffff12,#ffffff08)!important;border:1px solid #ffffff22!important;box-shadow:0 20px 50px -24px #000c!important;backdrop-filter:blur(10px)}
+
+#ntGate{justify-content:flex-start!important;padding-top:max(40px,calc(env(safe-area-inset-top,0px) + 30px))!important;-webkit-overflow-scrolling:touch}
+#ntGate .ntG-wrap{margin:auto!important;padding:8px 0 18px}
+#ntGate .ntG-logo{width:88px!important;height:88px!important;border-radius:26px;box-shadow:0 18px 44px -12px #38bdf8aa,0 0 0 1px #ffffff22}
+#ntGate .ntG-wrap h1{font-size:clamp(26px,7vw,34px)!important;background:linear-gradient(90deg,#fff,#7dd3fc 60%,#a5b4fc);-webkit-background-clip:text;background-clip:text;color:transparent}
+#ntGate .ntG-btn{border-radius:18px!important;min-height:56px!important;box-shadow:0 10px 26px -14px #000}
+#ntGate .ntG-btn.google{box-shadow:0 12px 30px -12px #38bdf866}
+@media (max-height:560px){#ntGate .ntG-logo{width:56px!important;height:56px!important;margin-bottom:8px!important}#ntGate .ntG-sub{margin-bottom:14px!important}}
