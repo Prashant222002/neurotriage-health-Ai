@@ -1,6 +1,0 @@
-.nt-lg{margin:10px 0 0;text-align:center;font-size:12px;opacity:.85}.nt-lg a{color:inherit;text-decoration:underline;margin:0 4px}
-#ntLegal{position:fixed;inset:0;z-index:2147483644;display:none;align-items:flex-end;justify-content:center;background:rgba(3,7,18,.78);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
-#ntLegal.on{display:flex}#ntLegal .lgs{width:100%;max-width:600px;max-height:90vh;max-height:90dvh;overflow:auto;-webkit-overflow-scrolling:touch;background:var(--sf,#101a2e);color:var(--tx,#eef4ff);border:1px solid var(--bd,#243556);border-radius:24px 24px 0 0;padding:18px 18px calc(24px + env(safe-area-inset-bottom,0px));font:14px/1.6 system-ui,sans-serif}
-#ntLegal h2{margin:0 0 2px;font-size:19px}#ntLegal h3{margin:14px 0 4px;font-size:15px}#ntLegal p,#ntLegal li{margin:4px 0;color:var(--mut,#94a7c6)}#ntLegal ul{padding-left:18px;margin:4px 0}
-#ntLegal .x{float:right;min-width:40px;height:40px;border-radius:12px;border:1px solid var(--bd,#243556);background:transparent;color:inherit;font-size:16px}
-#ntLegal .tb{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0}#ntLegal .tb button{padding:7px 12px;border-radius:999px;border:1px solid var(--bd,#243556);background:transparent;color:inherit;font-size:12.5px;font-weight:700}#ntLegal .tb button.on{background:var(--pri,#0d9488);border-color:transparent;color:#fff}
