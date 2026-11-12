@@ -1,5 +1,5 @@
-/* NeuroTriage service worker - auto-generated. Version: bb50195ef7 */
-const V = "nt-bb50195ef7";
+/* NeuroTriage service worker - auto-generated. Version: 4c4fd3aad6 */
+const V = "nt-4c4fd3aad6";
 const PRE = [
  "index.html",
  "offline.html",
@@ -9,7 +9,7 @@ const PRE = [
  "js/001-blk4.d361f05e.js",
  "js/002-blk7.5d0b37e4.js",
  "js/003-blk10.82d1d416.js",
- "js/004-nts-js.9bfa67c2.js",
+ "js/004-nts-js.4c4fd3aad6.js",
  "js/005-blk30.c1d182fe.js",
  "js/006-blk31-0.1113e794.js",
  "js/007-blk31-1.31a2f1c4.js",
